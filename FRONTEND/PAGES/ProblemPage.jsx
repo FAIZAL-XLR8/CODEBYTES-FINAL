@@ -522,11 +522,34 @@ This is called debouncing.
                         <div className="px-4 py-3 bg-[#1e1e1e] border-b border-[#3d3d3d] flex items-center justify-between">
                           <span className="font-semibold text-white">{solution.language}</span>
                           <button
-                            onClick={() => {
-                              navigator.clipboard.writeText(solution.solutionCode);
-                              alert("Copied to clipboard");
-                              
-                            }}
+                            onClick={
+
+async function copyToClipboard(textToCopy) {
+    // Navigator clipboard api needs a secure context (https)
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(textToCopy);
+    } else {
+        // Use the 'out of viewport hidden text area' trick
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+            
+        // Move textarea out of the viewport so it's not visible
+        textArea.style.position = "absolute";
+        textArea.style.left = "-999999px";
+            
+        document.body.prepend(textArea);
+        textArea.select();
+
+        try {
+            document.execCommand('copy');
+        } catch (error) {
+            console.error(error);
+        } finally {
+            textArea.remove();
+        }
+    }
+}
+}
                             className="btn btn-xs btn-ghost gap-1"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
