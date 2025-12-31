@@ -521,42 +521,57 @@ This is called debouncing.
                       <div key={index} className="bg-[#282828] rounded-lg border border-[#3d3d3d] overflow-hidden">
                         <div className="px-4 py-3 bg-[#1e1e1e] border-b border-[#3d3d3d] flex items-center justify-between">
                           <span className="font-semibold text-white">{solution.language}</span>
-                          <button
-                            onClick={
-
-async function copyToClipboard(textToCopy) {
-    // Navigator clipboard api needs a secure context (https)
-    if (navigator.clipboard && window.isSecureContext) {
+                                                <button
+  onClick={async () => {
+    const textToCopy = solution.solutionCode; 
+    
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(textToCopy);
-    } else {
-        // Use the 'out of viewport hidden text area' trick
+      } else {
         const textArea = document.createElement("textarea");
         textArea.value = textToCopy;
-            
-        // Move textarea out of the viewport so it's not visible
         textArea.style.position = "absolute";
         textArea.style.left = "-999999px";
-            
         document.body.prepend(textArea);
         textArea.select();
-
-        try {
-            document.execCommand('copy');
-        } catch (error) {
-            console.error(error);
-        } finally {
-            textArea.remove();
-        }
+        document.execCommand('copy');
+        textArea.remove();
+      }
+      
+    
+      const toast = document.createElement('div');
+      toast.className = 'toast toast-top toast-center';
+      toast.innerHTML = `
+        <div class="alert alert-success">
+          <span>✓ Copied to clipboard!</span>
+        </div>
+      `;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
+      
+    } catch (error) {
+      console.error(error);
+      
+      // Error toast
+      const toast = document.createElement('div');
+      toast.className = 'toast toast-top toast-center';
+      toast.innerHTML = `
+        <div class="alert alert-error">
+          <span>✗ Failed to copy</span>
+        </div>
+      `;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
     }
-}
-}
-                            className="btn btn-xs btn-ghost gap-1"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                            Copy
-                          </button>
+  }}
+  className="btn btn-xs btn-ghost gap-1"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+  </svg>
+  Copy
+</button>
                         </div>
                         <div className="p-4">
                           <pre className="text-sm text-gray-300 overflow-x-auto">
