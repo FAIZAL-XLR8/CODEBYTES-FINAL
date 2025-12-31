@@ -55,7 +55,8 @@ Guidelines:
 `;
 
       // Call backend API
-      const response = await fetch("http://localhost:3000/ai/chat", {
+         const API_URL = import.meta.env.VITE_API_URL || "";
+      const response = await fetch(`${API_URL}/ai/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

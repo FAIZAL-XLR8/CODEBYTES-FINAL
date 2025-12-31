@@ -104,7 +104,7 @@ const deleteVideo = async (req, res) => {
     const { problemId } = req.params;
     const userId = req.user._id;
 
-    const video = await solutionVideo.findOneAndDelete({problemId : problemId});
+    const video = await solutionVideoSchema.findOneAndDelete({problemId : problemId});
     if (!video) {
       return res.status(404).json({
         error: 'Video not found',

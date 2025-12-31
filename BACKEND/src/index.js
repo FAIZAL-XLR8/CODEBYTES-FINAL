@@ -1,4 +1,7 @@
 require("dotenv").config();
+console.log('MONGO_URI:', process.env.connect_DB);
+console.log('REDIS_PASSWORD:', process.env.REDIS_KEY);
+console.log('GEMINI_API_KEY:', process.env.GEMINI_API_KEY ? 'Set' : 'Missing');
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const userCollection = require("./Schemas/userSchema");
